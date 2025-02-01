@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
+
+	"gorm.io/gorm"
 
 	"github.com/okaaryanata/user/internal/domain"
 	"github.com/okaaryanata/user/internal/repository"
@@ -22,6 +25,15 @@ func NewUserService(
 }
 
 func (uc *UserService) CreateUser(ctx context.Context, args *domain.UserRequest) (*domain.User, error) {
+	user, err := uc.userRepo.GetUserByName(ctx, args.Name)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	if user != nil {
+		return nil, fmt.Errorf("user with name: %s already exist", args.Name)
+	}
+
 	return uc.userRepo.CreateUser(ctx, args)
 }
 

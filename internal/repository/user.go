@@ -61,3 +61,13 @@ func (u *UserRepository) GetUserByID(ctx context.Context, id uint) (*domain.User
 
 	return &user, nil
 }
+
+func (u *UserRepository) GetUserByName(ctx context.Context, name string) (*domain.User, error) {
+	var user domain.User
+	res := u.db.Where(&domain.User{Name: name}).First(&user)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return &user, nil
+}
