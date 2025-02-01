@@ -11,4 +11,9 @@ type (
 	UserRequest struct {
 		Name string `form:"name" binding:"required"`
 	}
+
+	GetUserRequest struct {
+		Page int
+		Size int
+	}
 )
