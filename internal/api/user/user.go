@@ -76,7 +76,7 @@ func (c *Controller) GetUserByID(ctx *gin.Context) {
 		}
 	}()
 
-	id := ctx.Param("userID")
+	id := ctx.Param("id")
 	userID, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"result": false, "errors": err.Error()})
@@ -84,7 +84,7 @@ func (c *Controller) GetUserByID(ctx *gin.Context) {
 	}
 
 	if userID <= 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"result": false, "errors": "userID should be bigger than 0"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"result": false, "errors": "id should be bigger than 0"})
 		return
 	}
 
