@@ -2,11 +2,15 @@ package app
 
 import (
 	"errors"
+	"fmt"
 	"os"
+	"strconv"
+	"time"
 
-	"github.com/okaaryanata/user/internal/domain"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	"github.com/okaaryanata/user/internal/domain"
 )
 
 func (c *AppConfig) InitSqllite() error {
@@ -19,6 +23,8 @@ func (c *AppConfig) InitSqllite() error {
 		file.Close()
 	}
 
+	defer c.migrateData()
+
 	// Initialize Database
 	var err error
 	db, err := gorm.Open(sqlite.Open(dbFile), &gorm.Config{})
@@ -30,4 +36,20 @@ func (c *AppConfig) InitSqllite() error {
 	c.DB = db
 
 	return nil
+}
+
+func (c *AppConfig) migrateData() {
+	isMigrateData, _ := strconv.ParseBool(os.Getenv("DB_MIGRATION"))
+	if isMigrateData {
+		var count int64
+		c.DB.Model(&domain.User{}).Count(&count)
+
+		if count == 0 {
+			user := domain.User{Name: "Oka Aryanata", CreatedAt: time.Now().UnixMicro(), UpdatedAt: time.Now().UnixMicro()}
+			c.DB.Create(&user)
+			fmt.Println("User inserted:", user.Name)
+		} else {
+			fmt.Println("User already exists, no insertion.")
+		}
+	}
 }

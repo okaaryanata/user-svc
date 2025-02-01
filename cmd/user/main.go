@@ -6,10 +6,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
 	"github.com/okaaryanata/user/internal/api/health"
 	"github.com/okaaryanata/user/internal/api/user"
 	"github.com/okaaryanata/user/internal/app"
 	"github.com/okaaryanata/user/internal/domain"
+	"github.com/okaaryanata/user/internal/repository"
+	"github.com/okaaryanata/user/internal/service"
 )
 
 func main() {
@@ -29,9 +32,15 @@ func startService() {
 	}
 	defer sqlDB.Close()
 
-	// Controller
+	// Repositories
+	userRepository := repository.NewUserRepository(app.DB)
+
+	// Services
+	userSvc := service.NewUserService(userRepository)
+
+	// Controllers
 	healthController := health.NewHealthController()
-	userController := user.NewUserController()
+	userController := user.NewUserController(userSvc)
 
 	// Create main route
 	router := gin.Default()

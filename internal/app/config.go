@@ -7,10 +7,10 @@ import (
 )
 
 type AppConfig struct {
-	Host   string
-	Port   string
-	InitDB bool
-	DB     *gorm.DB
+	Host        string
+	Port        string
+	MigrateData bool
+	DB          *gorm.DB
 }
 
 func (app *AppConfig) InitService() {

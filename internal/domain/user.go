@@ -2,9 +2,9 @@ package domain
 
 type (
 	User struct {
-		ID        int    `json:"id"`
-		Name      string `json:"name"`
-		CreatedAt int64  `json:"created_at"`
-		UpdatedAt int64  `json:"updated_at"`
+		ID        uint   `json:"id" gorm:"primaryKey;autoIncrement"`
+		Name      string `json:"name" gorm:"not null"`
+		CreatedAt int64  `json:"created_at" gorm:"autoCreateTime:milli"`
+		UpdatedAt int64  `json:"updated_at" gorm:"autoUpdateTime:milli"`
 	}
 )
