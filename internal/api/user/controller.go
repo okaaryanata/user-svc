@@ -19,5 +19,7 @@ func NewUserController(userSvc *service.UserService) *Controller {
 }
 
 func (c *Controller) RegisterRoutes(router *gin.RouterGroup) {
+	router.POST(``, c.CreateUser)
 	router.GET(``, c.GetUsers)
+	router.GET(`/:userID`, c.GetUserByID)
 }

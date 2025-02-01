@@ -21,11 +21,14 @@ func NewUserService(
 	}
 }
 
-func (uc *UserService) GetUsers(ctx context.Context) ([]domain.User, error) {
-	users, err := uc.userRepo.GetUsers(ctx)
-	if err != nil {
-		return users, err
-	}
+func (uc *UserService) CreateUser(ctx context.Context, args *domain.UserRequest) (*domain.User, error) {
+	return uc.userRepo.CreateUser(ctx, args)
+}
 
-	return users, nil
+func (uc *UserService) GetUsers(ctx context.Context) ([]domain.User, error) {
+	return uc.userRepo.GetUsers(ctx)
+}
+
+func (uc *UserService) GetUserByID(ctx context.Context, id uint) (*domain.User, error) {
+	return uc.userRepo.GetUserByID(ctx, id)
 }

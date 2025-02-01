@@ -7,4 +7,8 @@ type (
 		CreatedAt int64  `json:"created_at" gorm:"autoCreateTime:milli"`
 		UpdatedAt int64  `json:"updated_at" gorm:"autoUpdateTime:milli"`
 	}
+
+	UserRequest struct {
+		Name string `form:"name" binding:"required"`
+	}
 )

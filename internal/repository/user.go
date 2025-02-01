@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"time"
 
 	"gorm.io/gorm"
 
@@ -21,6 +22,21 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	}
 }
 
+func (u *UserRepository) CreateUser(ctx context.Context, args *domain.UserRequest) (*domain.User, error) {
+	user := &domain.User{
+		Name:      args.Name,
+		CreatedAt: time.Now().UnixMicro(),
+		UpdatedAt: time.Now().UnixMicro(),
+	}
+
+	res := u.db.Create(&user)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return user, nil
+}
+
 func (u *UserRepository) GetUsers(ctx context.Context) ([]domain.User, error) {
 	var users []domain.User
 	u.db.Order("created_at desc").Find(&users)
@@ -34,4 +50,14 @@ func (u *UserRepository) GetUsers(ctx context.Context) ([]domain.User, error) {
 	}
 
 	return users, nil
+}
+
+func (u *UserRepository) GetUserByID(ctx context.Context, id uint) (*domain.User, error) {
+	var user domain.User
+	res := u.db.Where(&domain.User{ID: id}).First(&user)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return &user, nil
 }
