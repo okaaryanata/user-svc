@@ -8,6 +8,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/okaaryanata/user/internal/api/health"
+	"github.com/okaaryanata/user/internal/api/middleware"
 	"github.com/okaaryanata/user/internal/api/user"
 	"github.com/okaaryanata/user/internal/app"
 	"github.com/okaaryanata/user/internal/domain"
@@ -43,8 +44,12 @@ func startService() {
 	userController := user.NewUserController(userSvc)
 
 	// Create main route
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.LoggerWithConfig(gin.LoggerConfig{
+		SkipPaths: middleware.GetListSkipLogPath(),
+	}))
 	router.Use(gin.Recovery())
+	router.Use(middleware.SetCORSMiddleware())
 
 	// Register main route
 	mainRoute := router.Group(domain.MainRoute)
