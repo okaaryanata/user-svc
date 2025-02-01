@@ -37,9 +37,12 @@ func (u *UserRepository) CreateUser(ctx context.Context, args *domain.UserReques
 	return user, nil
 }
 
-func (u *UserRepository) GetUsers(ctx context.Context) ([]domain.User, error) {
+func (u *UserRepository) GetUsers(ctx context.Context, args *domain.GetUserRequest) ([]domain.User, error) {
 	var users []domain.User
-	u.db.Order("created_at desc").Find(&users)
+	offset := (args.Page - 1) * args.Size
+	u.db.Order("created_at desc").
+		Limit(args.Size).Offset(offset).
+		Find(&users)
 	for i := range users {
 		users[i].CreatedAt *= 1000
 		users[i].UpdatedAt *= 1000

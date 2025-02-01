@@ -37,8 +37,8 @@ func (uc *UserService) CreateUser(ctx context.Context, args *domain.UserRequest)
 	return uc.userRepo.CreateUser(ctx, args)
 }
 
-func (uc *UserService) GetUsers(ctx context.Context) ([]domain.User, error) {
-	return uc.userRepo.GetUsers(ctx)
+func (uc *UserService) GetUsers(ctx context.Context, args *domain.GetUserRequest) ([]domain.User, error) {
+	return uc.userRepo.GetUsers(ctx, args)
 }
 
 func (uc *UserService) GetUserByID(ctx context.Context, id uint) (*domain.User, error) {
