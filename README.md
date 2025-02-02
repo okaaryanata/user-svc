@@ -1,6 +1,7 @@
 # User Service
 
 A service for managing user data (creating new user, get list user and get specific user)
+User data will be stored in Sqlite
 
 ## Prerequisite Requirements
 
